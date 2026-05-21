@@ -6,7 +6,7 @@ BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 DATASET_PATH = os.path.join(BASE_DIR, "dataset.csv")
 
 # Nom du geste à réinitialiser (supprimer)
-TARGET_GESTURE = "HAND_LEFT"
+TARGET_GESTURE = "OPEN_HANDS"
 
 if os.path.exists(DATASET_PATH):
     # 1. Lecture des données existantes
