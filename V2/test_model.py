@@ -2,7 +2,8 @@ import cv2
 import mediapipe as mp
 import joblib
 import os
-import numpy as np
+import math
+import time
 
 # ===== CONFIGURATION =====
 mapping = {
@@ -42,87 +43,180 @@ mapping = {
 }
 
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
+
 MODEL_PATH = os.path.join(BASE_DIR, "gesture_model.pkl")
 IMG_DIR = os.path.join(BASE_DIR, "img")
 
-# Chargement Modèle
-if os.path.exists(MODEL_PATH):
-    model = joblib.load(MODEL_PATH)
-    print("✅ Modèle chargé.")
-else:
-    print(f"❌ Modèle introuvable à : {MODEL_PATH}")
-    exit()
+# ===== CHARGEMENT MODÈLE =====
+model = joblib.load(MODEL_PATH)
 
-# Chargement Images
+# ===== CHARGEMENT IMAGES =====
 gesture_images = {}
+
 for ml_label, file_name in mapping.items():
+
     path = os.path.join(IMG_DIR, f"{file_name}.png")
+
     img = cv2.imread(path)
+
     if img is not None:
         gesture_images[ml_label] = img
 
-def overlay_emoji(frame, img, x, y, size=120):
-    if img is None: return
-    try:
-        img_res = cv2.resize(img, (size, size))
-        h, w, _ = img_res.shape
-        y1, y2 = max(0, y), min(frame.shape[0], y + h)
-        x1, x2 = max(0, x), min(frame.shape[1], x + w)
-        frame[y1:y2, x1:x2] = img_res[0:y2-y1, 0:x2-x1]
-    except: pass
 
+# ===== NORMALISATION =====
+def normalize_hand(hand_landmarks):
+
+    features = []
+
+    wrist = hand_landmarks.landmark[0]
+    middle = hand_landmarks.landmark[12]
+
+    # Taille de référence
+    hand_size = math.sqrt(
+        (middle.x - wrist.x) ** 2
+        + (middle.y - wrist.y) ** 2
+        + (middle.z - wrist.z) ** 2
+    )
+
+    if hand_size == 0:
+        hand_size = 1
+
+    for lm in hand_landmarks.landmark:
+
+        x = (lm.x - wrist.x) / hand_size
+        y = (lm.y - wrist.y) / hand_size
+        z = (lm.z - wrist.z) / hand_size
+
+        features.extend([x, y, z])
+
+    return features
+
+
+# ===== OVERLAY =====
+def overlay_emoji(frame, img, x, y, size=120):
+
+    if img is None:
+        return
+
+    try:
+
+        img_res = cv2.resize(img, (size, size))
+
+        h, w, _ = img_res.shape
+
+        y1 = max(0, y)
+        y2 = min(frame.shape[0], y + h)
+
+        x1 = max(0, x)
+        x2 = min(frame.shape[1], x + w)
+
+        frame[y1:y2, x1:x2] = img_res[0 : y2 - y1, 0 : x2 - x1]
+
+    except:
+        pass
+
+
+# ===== MEDIAPIPE =====
 mp_hands = mp.solutions.hands
+
 hands = mp_hands.Hands(max_num_hands=2, min_detection_confidence=0.7)
+
 mp_draw = mp.solutions.drawing_utils
 
+# ===== WEBCAM =====
 cap = cv2.VideoCapture(0)
 
 while True:
+
     ret, frame = cap.read()
-    if not ret: break
+
+    if not ret:
+        break
+
     frame = cv2.flip(frame, 1)
+
     h_f, w_f, _ = frame.shape
+
     rgb = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
+
     result = hands.process(rgb)
 
     if result.multi_hand_landmarks:
+
         test_features = []
-        for hl in result.multi_hand_landmarks:
+
+        # ===== TRI GAUCHE -> DROITE =====
+        hands_sorted = sorted(
+            result.multi_hand_landmarks, key=lambda h: h.landmark[0].x
+        )
+
+        # ===== EXTRACTION NORMALISÉE =====
+        for hl in hands_sorted:
+
             mp_draw.draw_landmarks(frame, hl, mp_hands.HAND_CONNECTIONS)
-            for lm in hl.landmark:
-                test_features.extend([lm.x, lm.y, lm.z])
-        
-        if len(result.multi_hand_landmarks) == 1:
+
+            normalized = normalize_hand(hl)
+
+            test_features.extend(normalized)
+
+        # ===== UNE SEULE MAIN =====
+        if len(hands_sorted) == 1:
             test_features.extend([0.0] * 63)
 
+        # ===== PRÉDICTION =====
         if len(test_features) == 126:
-            try:
-                pred = model.predict([test_features])[0]
-                
-                # On prend la position du bout de l'index (point 8) pour placer l'affichage
-                idx_x = int(result.multi_hand_landmarks[0].landmark[8].x * w_f)
-                idx_y = int(result.multi_hand_landmarks[0].landmark[8].y * h_f)
 
-                # --- REGLAGE POSITION ---
-                # On met l'emoji bien au dessus (idx_y - 180)
-                # On met le texte un peu plus bas que l'emoji pour qu'ils ne se touchent plus
-                text_y = idx_y - 40 
+            try:
+
+                pred = model.predict([test_features])[0]
+
+                # ===== POSITION =====
+                idx_x = int(hands_sorted[0].landmark[8].x * w_f)
+
+                idx_y = int(hands_sorted[0].landmark[8].y * h_f)
+
+                text_y = idx_y - 40
                 emoji_y = idx_y - 200
 
-                # Dessiner un petit rectangle noir derrière le texte pour la lisibilité
-                cv2.rectangle(frame, (idx_x - 10, text_y - 30), (idx_x + 250, text_y + 10), (0,0,0), -1)
-                
-                # Affichage du texte en VERT
-                cv2.putText(frame, pred, (idx_x, text_y), 
-                            cv2.FONT_HERSHEY_DUPLEX, 1, (0, 255, 0), 2)
-                
-                # Affichage Emoji
+                # ===== FOND TEXTE =====
+                cv2.rectangle(
+                    frame,
+                    (idx_x - 10, text_y - 30),
+                    (idx_x + 300, text_y + 10),
+                    (0, 0, 0),
+                    -1,
+                )
+
+                # ===== TEXTE =====
+                cv2.putText(
+                    frame,
+                    pred,
+                    (idx_x, text_y),
+                    cv2.FONT_HERSHEY_DUPLEX,
+                    1,
+                    (0, 255, 0),
+                    2,
+                )
+
+                # ===== EFFET PULSE =====
+                pulse = int(15 * math.sin(time.time() * 6))
+
+                size = 120 + pulse
+
+                # ===== IMAGE =====
                 if pred in gesture_images:
-                    overlay_emoji(frame, gesture_images[pred], idx_x - 60, emoji_y)
-            except: pass
+
+                    overlay_emoji(
+                        frame, gesture_images[pred], idx_x - 60, emoji_y, size=size
+                    )
+
+            except Exception as e:
+                print("Erreur :", e)
 
     cv2.imshow("TIAGO Robot Recognition", frame)
-    if cv2.waitKey(1) & 0xFF == 27: break
+
+    if cv2.waitKey(1) & 0xFF == 27:
+        break
 
 cap.release()
 cv2.destroyAllWindows()

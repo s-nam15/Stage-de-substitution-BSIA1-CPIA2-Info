@@ -2,6 +2,7 @@ import cv2
 import mediapipe as mp
 import csv
 import os
+import math
 
 # ===== CONFIGURATION =====
 mapping = {
@@ -43,57 +44,134 @@ mapping = {
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 DATASET_PATH = os.path.join(BASE_DIR, "dataset.csv")
 
-# Sélection du label
+
+# ===== NORMALISATION =====
+def normalize_hand(hand_landmarks):
+
+    features = []
+
+    wrist = hand_landmarks.landmark[0]
+    middle = hand_landmarks.landmark[12]
+
+    # Taille de référence
+    hand_size = math.sqrt(
+        (middle.x - wrist.x) ** 2
+        + (middle.y - wrist.y) ** 2
+        + (middle.z - wrist.z) ** 2
+    )
+
+    if hand_size == 0:
+        hand_size = 1
+
+    # Normalisation
+    for lm in hand_landmarks.landmark:
+
+        x = (lm.x - wrist.x) / hand_size
+        y = (lm.y - wrist.y) / hand_size
+        z = (lm.z - wrist.z) / hand_size
+
+        features.extend([x, y, z])
+
+    return features
+
+
+# ===== LABEL =====
 valid_labels = sorted(list(mapping.keys()))
+
 print("\n--- GESTES DISPONIBLES ---")
 print(", ".join(valid_labels))
+
 label = input("\nEntrez le nom du geste à collecter : ").upper()
 
 if label not in mapping:
     print("Erreur: Label non présent dans le mapping.")
     exit()
 
+# ===== MEDIAPIPE =====
 mp_hands = mp.solutions.hands
+
 hands = mp_hands.Hands(max_num_hands=2, min_detection_confidence=0.7)
+
 mp_draw = mp.solutions.drawing_utils
 
+# ===== WEBCAM =====
 cap = cv2.VideoCapture(0)
 
+# ===== CSV =====
 with open(DATASET_PATH, "a", newline="") as f:
+
     writer = csv.writer(f)
-    print(f"🚀 Collecte lancée pour : {label}. Appuyez sur 'S' pour sauvegarder.")
+
+    print(f"\n🚀 Collecte lancée pour : {label}")
+    print("Appuyez sur S pour sauvegarder")
+    print("ESC pour quitter\n")
 
     while True:
+
         ret, frame = cap.read()
-        if not ret: break
+
+        if not ret:
+            break
+
         frame = cv2.flip(frame, 1)
+
         rgb = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
+
         result = hands.process(rgb)
 
         landmarks_to_save = []
 
         if result.multi_hand_landmarks:
-            for hand_landmarks in result.multi_hand_landmarks:
+
+            # ===== TRI GAUCHE → DROITE =====
+            hands_sorted = sorted(
+                result.multi_hand_landmarks, key=lambda h: h.landmark[0].x
+            )
+
+            for hand_landmarks in hands_sorted:
+
                 mp_draw.draw_landmarks(frame, hand_landmarks, mp_hands.HAND_CONNECTIONS)
-                for lm in hand_landmarks.landmark:
-                    landmarks_to_save.extend([lm.x, lm.y, lm.z])
-            
-            # Compléter avec des zéros si une seule main est détectée
-            if len(result.multi_hand_landmarks) == 1:
+
+                # ===== NORMALISATION =====
+                normalized = normalize_hand(hand_landmarks)
+
+                landmarks_to_save.extend(normalized)
+
+            # ===== SI UNE MAIN =====
+            if len(hands_sorted) == 1:
                 landmarks_to_save.extend([0.0] * 63)
 
-        # Affichage status
-        nb_mains = len(result.multi_hand_landmarks) if result.multi_hand_landmarks else 0
-        cv2.putText(frame, f"Label: {label} | Mains: {nb_mains}", (10, 30), 
-                    cv2.FONT_HERSHEY_SIMPLEX, 0.7, (255, 255, 0), 2)
+        # ===== AFFICHAGE =====
+        nb_mains = (
+            len(result.multi_hand_landmarks) if result.multi_hand_landmarks else 0
+        )
+
+        cv2.putText(
+            frame,
+            f"Label: {label} | Mains: {nb_mains}",
+            (10, 30),
+            cv2.FONT_HERSHEY_SIMPLEX,
+            0.7,
+            (255, 255, 0),
+            2,
+        )
+
         cv2.imshow("Collecte Multi-Mains", frame)
 
+        # ===== TOUCHES =====
         key = cv2.waitKey(1) & 0xFF
-        if key == ord('s') and len(landmarks_to_save) == 126:
+
+        # ===== SAUVEGARDE =====
+        if key == ord("s") and len(landmarks_to_save) == 126:
+
             writer.writerow(landmarks_to_save + [label])
-            print(f"✅ Enregistré (126 points)")
-        elif key == 27: # ESC
+
+            print("✅ Enregistré")
+
+        # ===== ESC =====
+        elif key == 27:
             break
 
+# ===== FIN =====
 cap.release()
 cv2.destroyAllWindows()

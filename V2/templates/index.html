@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="fr">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Reconnaissance de Gestes</title>
+
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+
+<body>
+
+    <nav class="navbar">
+        <div class="logo">Emoji IA</div>
+        <div class="nav-text">Système de reconnaissance</div>
+    </nav>
+
+    <main class="main-container">
+
+        <section class="left-panel">
+            <h1>Reconnaissance de gestes en temps réel</h1>
+
+            <p>
+                Système de détection des mouvements de la main (emoji)
+            </p>
+
+            <div class="status-box">
+                Caméra active • Détection en cours
+            </div>
+        </section>
+
+        <section class="video-panel">
+            <img src="{{ url_for('video') }}" alt="Flux vidéo">
+        </section>
+
+    </main>
+
+    <footer>
+        Projet de reconnaissance de gestes • IA • 2026
+    </footer>
+
+</body>
+
+</html>
