@@ -1,0 +1,4 @@
+Aujourd’hui, nous avons terminé l’entraînement des gestes à deux mains.
+Suite à un échange avec notre tuteur, nous avons eu l’idée d’appliquer une normalisation sur les données de détection. Après plusieurs tests, nous avons constaté que cette normalisation améliore la qualité de la détection et permet un apprentissage plus rapide et plus stable pour l’algorithme.
+Nous pensons que cette approche pourrait réduire le nombre d’erreurs et améliorer la précision du modèle, ce qui permettrait d’obtenir une détection plus fiable et plus cohérente.
+Suite à ces résultats, nous avons décidé de reprendre la collecte de données en utilisant ce nouvel algorithme normalisé afin d’obtenir de meilleures performances.
