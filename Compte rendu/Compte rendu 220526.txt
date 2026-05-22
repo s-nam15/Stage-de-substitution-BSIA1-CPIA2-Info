@@ -1,0 +1,3 @@
+Aujourd’hui, nous avons entraîné tous les gestes de la main sur la nouvelle version normalisée du système de reconnaissance des émoji.
+Cette nouvelle approche nécessite beaucoup moins de données pour fonctionner correctement, tout en offrant une meilleure fiabilité et une précision plus stable dans la détection des gestes.
+Ensuite, nous avons commencé à nous intéresser au fonctionnement de ROS afin de préparer le deuxième livrable du projet, qui concernera le robot et la suite du développement.
