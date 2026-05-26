@@ -1,0 +1,3 @@
+Aujourd’hui, nous avons terminé l’apprentissage des gestes avec la version normalisée du système. Cette étape nous a permis d’améliorer la cohérence et la fiabilité de la reconnaissance des gestes.
+Nous avons également commencé la rédaction du premier livrable du projet afin de structurer et présenter l’avancement du travail réalisé jusqu’à présent.
+À partir de lundi, nous serons prêts à présenter la première partie du projet au proviseur. Nous pouvons donc prévoir un rendez-vous selon vos disponibilités.
