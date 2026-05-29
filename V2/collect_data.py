@@ -21,7 +21,8 @@ mapping = {
     "PALM_DOWN": "main_paume_vers_le_bas",
     "PALM_UP": "main_paume_vers_le_haut",
     "RAISED_HAND": "main_levee",
-    "SPREAD_HAND": "main_levee_doigts_ecartes",
+    "HAND_TO_THE_LEFT": "main_vers_la_gauche",
+    "HAND_TO_THE_RIGHT": "main_vers_la_droite",
     "PRAY_HANDS": "mains_en_priere",
     "RAISED_HANDS": "mains_levees",
     "OPEN_HANDS": "mains_ouvertes",
@@ -36,10 +37,10 @@ mapping = {
     "PINCHED_FINGERS": "pouce_et_index_rapproches",
     "THUMBS_DOWN": "pouce_vers_le_bas",
     "THUMBS_UP": "pouce_vers_le_haut",
-    "VULCAN": "salut_vulcain",
     "CALL_ME": "signe_appel_telephonique_avec_les_doigts",
     "PEACE": "v_de_la_victoire",
 }
+
 
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 DATASET_PATH = os.path.join(BASE_DIR, "dataset.csv")
@@ -53,13 +54,14 @@ def normalize_hand(hand_landmarks):
     wrist = hand_landmarks.landmark[0]
     middle = hand_landmarks.landmark[12]
 
-    # Taille de référence
+    # Distance de référence
     hand_size = math.sqrt(
         (middle.x - wrist.x) ** 2
         + (middle.y - wrist.y) ** 2
         + (middle.z - wrist.z) ** 2
     )
 
+    # Sécurité
     if hand_size == 0:
         hand_size = 1
 
@@ -75,7 +77,7 @@ def normalize_hand(hand_landmarks):
     return features
 
 
-# ===== LABEL =====
+# ===== SÉLECTION LABEL =====
 valid_labels = sorted(list(mapping.keys()))
 
 print("\n--- GESTES DISPONIBLES ---")
@@ -102,9 +104,8 @@ with open(DATASET_PATH, "a", newline="") as f:
 
     writer = csv.writer(f)
 
-    print(f"\n🚀 Collecte lancée pour : {label}")
-    print("Appuyez sur S pour sauvegarder")
-    print("ESC pour quitter\n")
+    print(f"🚀 Collecte lancée pour : {label}")
+    print("Appuyez sur 'S' pour sauvegarder")
 
     while True:
 
@@ -123,7 +124,7 @@ with open(DATASET_PATH, "a", newline="") as f:
 
         if result.multi_hand_landmarks:
 
-            # ===== TRI GAUCHE → DROITE =====
+            # ===== TRI GAUCHE -> DROITE =====
             hands_sorted = sorted(
                 result.multi_hand_landmarks, key=lambda h: h.landmark[0].x
             )
@@ -158,7 +159,7 @@ with open(DATASET_PATH, "a", newline="") as f:
 
         cv2.imshow("Collecte Multi-Mains", frame)
 
-        # ===== TOUCHES =====
+        # ===== CLAVIER =====
         key = cv2.waitKey(1) & 0xFF
 
         # ===== SAUVEGARDE =====
