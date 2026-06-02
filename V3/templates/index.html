@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <title>Reconnaissance de gestes</title>
+
+    <!-- Lien vers le CSS -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+
+<body>
+
+    <h1>🤖 Reconnaissance de gestes</h1>
+
+    <div class="container">
+        <div class="video-card">
+            <img src="{{ url_for('video') }}">
+        </div>
+
+        <div class="status">
+            👋 Faites un geste devant la caméra
+        </div>
+    </div>
+
+    <div class="footer">
+        Projet Stage - Interaction Homme Robot
+    </div>
+
+</body>
+</html>

@@ -47,7 +47,7 @@ CONFIDENCE_THRESHOLD = 0.7
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 
 MODEL_PATH = os.path.join(BASE_DIR, "gesture_model.pkl")
-IMG_DIR = os.path.join(BASE_DIR, "img")
+IMG_DIR = os.path.join(BASE_DIR, "static", "img")
 
 # ===== CHARGEMENT MODÈLE =====
 if os.path.exists(MODEL_PATH):
