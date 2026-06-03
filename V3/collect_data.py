@@ -46,36 +46,63 @@ BASE_DIR = os.path.dirname(os.path.abspath(__file__)) # Récupèrer le dossier o
 DATASET_PATH = os.path.join(BASE_DIR, "dataset.csv") # Création du chemin du dataset dans un dossier V3
 
 
-# ===== NORMALISATION =====
+# Normalisation pour réduire les variations liées à la position de la main devant la caméra.
 def normalize_hand(hand_landmarks):
 
     features = []
 
-    wrist = hand_landmarks.landmark[0]
-    middle = hand_landmarks.landmark[12]
+    # Récupérer les deux points de référence
+    wrist = hand_landmarks.landmark[0] # poignet
+    middle = hand_landmarks.landmark[12] # extrémité du majeur
 
-    # Distance de référence
+    # Distance de référence en appliquant la distance euclidienne
     hand_size = math.sqrt(
         (middle.x - wrist.x) ** 2
         + (middle.y - wrist.y) ** 2
         + (middle.z - wrist.z) ** 2
     )
 
-    # Sécurité
+    """
+    À l'origine, il y a 21 points sur la main, mais par souci de simplicité de calcul, 
+    on suppose qu'il n'y en ait que 3 : le poignet, le bout du majeur et le bout de l'index.
+
+    wrist (poignet, 0) : (x : 10, y : 20, z : 0)
+    middle (bout du majeur, 12) : (x : 10, y : 25, z : 0)
+    index (bout de l'index, 8) : (x : 12, y : 24, z : 0)
+
+    Résultat calcul de hand_size = 5 (la valeuer standard de la taille de la main de cette personne)
+    """
+
+    # Sécurité pour éviter la division par zéro
     if hand_size == 0:
         hand_size = 1
 
-    # Normalisation
+    # Parcourir les 21 landmarks (0 ~ 20)
     for lm in hand_landmarks.landmark:
 
-        x = (lm.x - wrist.x) / hand_size
-        y = (lm.y - wrist.y) / hand_size
-        z = (lm.z - wrist.z) / hand_size
+        # Pour chaque point : (Coordonnées du point actuel - Coordonnées du poignet) / Taille de la main
+        x = (lm.x - wrist.x) / hand_size # (10 - 10) / 5 = 0 (exemple de poignet)
+        y = (lm.y - wrist.y) / hand_size # (20 - 20) / 5 = 0 (exemple de poignet)
+        z = (lm.z - wrist.z) / hand_size # (0 - 0) / 5 = 0 (exemple de poignet)
 
-        features.extend([x, y, z])
+        """
+        1. - wrist.x (substitution) : forcer le poignet à se déplacer vers la position (0,0,0) -> aligner à l'origine
+        2. / hand_size (division) : maintenir un rapport constant, quelle que soit la variation de taille de la main -> ajuster la taille
+        """
 
-    return features
+        # on ajoute les points dans la liste
+        features.extend([x, y, z]) # [0, 0, 0] (Le point de référence devient 0 -> aligner à l'origine) (exemple de poignet)
 
+    return features # 21 points * 3 coordonnées = 63 valeurs enreigstrés dans la liste
+
+    """
+    D'après le calcul : [0, 0, 0, 0, 1, 0, 0.4, 0.8, 0] pour 3 (63 valeurs de base)
+
+    Imagine l'utilisateur approche sa main très près de la caméra ce qui a pour effet de doubler la taille de toutes les coordonnées.
+    Le poignet devient (20, 40, 0) et le majeur devient (20, 50, 0) -> la taille de la main (hand_size) est calculée comme 10.
+    Même si on recalcule avec ces données, le résultat reste même qu'avant en axe y par exemple (1, 0.8).
+    """
+    
 
 # ===== SÉLECTION LABEL =====
 valid_labels = sorted(list(mapping.keys()))
