@@ -1,10 +1,10 @@
-import cv2
-import mediapipe as mp
-import csv
-import os
-import math
+import cv2 # OpenCV -> d'accèder à la webcam et de dessiner du texte
+import mediapipe as mp # détecter les mains et extraire les 21 landmarks
+import csv # Pour enregistrer les donnnées dans dataset.csv
+import os # Permettre de gérer les chemins de fichiers
+import math # Pour calculer la distance euclidienne
 
-# ===== CONFIGURATION =====
+# Gestes
 mapping = {
     "FINGERS_JOINED": "bout_des_doigts_joints",
     "HORNS": "cornes_avec_les_doigts",
@@ -42,8 +42,8 @@ mapping = {
 }
 
 
-BASE_DIR = os.path.dirname(os.path.abspath(__file__))
-DATASET_PATH = os.path.join(BASE_DIR, "dataset.csv")
+BASE_DIR = os.path.dirname(os.path.abspath(__file__)) # Récupèrer le dossier où se trouve ce fichier (collect_data.py -> Chemin absolu -> Dossier V3)
+DATASET_PATH = os.path.join(BASE_DIR, "dataset.csv") # Création du chemin du dataset dans un dossier V3
 
 
 # ===== NORMALISATION =====
