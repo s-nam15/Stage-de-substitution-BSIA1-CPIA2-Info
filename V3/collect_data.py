@@ -100,106 +100,122 @@ def normalize_hand(hand_landmarks):
 
     Imagine l'utilisateur approche sa main très près de la caméra ce qui a pour effet de doubler la taille de toutes les coordonnées.
     Le poignet devient (20, 40, 0) et le majeur devient (20, 50, 0) -> la taille de la main (hand_size) est calculée comme 10.
-    Même si on recalcule avec ces données, le résultat reste même qu'avant en axe y par exemple (1, 0.8).
+    Même si on recalcule avec ces données, le résultat reste même qu'avant en axe y par exemple 1, 0.8.
     """
     
-
-# ===== SÉLECTION LABEL =====
+# Récupérer tous les gestes (labels) enreigstrés dans le dictionnaire mapping
 valid_labels = sorted(list(mapping.keys()))
 
 print("\n--- GESTES DISPONIBLES ---")
 print(", ".join(valid_labels))
 
-label = input("\nEntrez le nom du geste à collecter : ").upper()
+label = input("\nEntrez le nom du geste à collecter : ").upper() # Force en majuscule
 
+# Si utilisateur saisit la geste inconnue 
 if label not in mapping:
     print("Erreur: Label non présent dans le mapping.")
     exit()
 
-# ===== MEDIAPIPE =====
+# Mediapipe (charger le modèle de détection)
 mp_hands = mp.solutions.hands
 
+# On autorise jusqu'à deux mains et 70% de confiance minimum
 hands = mp_hands.Hands(max_num_hands=2, min_detection_confidence=0.7)
 
+# Afficher visuellement les articulations et les lignes des doigts (points de repère) sur l'écran de la caméra
 mp_draw = mp.solutions.drawing_utils
 
-# ===== WEBCAM =====
+# Ouvrir le webcam
 cap = cv2.VideoCapture(0)
 
-# ===== CSV =====
-with open(DATASET_PATH, "a", newline="") as f:
+# Ouvrir le fichier csv
+with open(DATASET_PATH, "a", newline="") as f: # "a" = Append (on ajoute des données sans supprimer l'ancien dataset)
 
-    writer = csv.writer(f)
+    writer = csv.writer(f) # Permettre d'écrire dans un fichier csv
 
-    print(f"🚀 Collecte lancée pour : {label}")
+    print(f"Collecte lancée pour : {label}") # label (nom du geste) saisit par utilisateur en ligne 112
     print("Appuyez sur 'S' pour sauvegarder")
 
     while True:
 
-        ret, frame = cap.read()
+        # Lecture webcam
+        ret, frame = cap.read() # ret = valeur booléan, frame = données pixels, cap.read() = Une image extraite (une frame) de la vidéo de la webcam connectée
 
+        # Si il n'a pas réussi à afficher le webcam
         if not ret:
             break
 
+        # Effet miroir = 1
         frame = cv2.flip(frame, 1)
 
-        rgb = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
+        # Conversion RGB
+        rgb = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB) # OpenCV traite les images dans l'ordre BGR (Bleu-Vert-Rouge) mais le modèle d'IA MediaPipe les traite dans l'ordre RGB
 
-        result = hands.process(rgb)
+        # Détection des mains
+        result = hands.process(rgb) # MediaPipe analyse l'image, les résultats de l'analyse (coordonnées des articulations des doigts, etc.) sont stockés dans result
 
-        landmarks_to_save = []
+        landmarks_to_save = [] # Liste vide destinée à stocker les 126 coordonnées qui seront finalement enregistrées dans un fichier CSV
 
+        # Si une seule main est détectée sur l'écran
         if result.multi_hand_landmarks:
 
-            # ===== TRI GAUCHE -> DROITE =====
+            # Trier les mains trouvées de gauche à droite à l'écran et stocke dans hands_sorted sous forme de liste pour éviter le MediaPipe inverser main gauche et droite
             hands_sorted = sorted(
-                result.multi_hand_landmarks, key=lambda h: h.landmark[0].x
+                result.multi_hand_landmarks, key=lambda h: h.landmark[0].x # landmark[0] = poignet, plus la valeur de x est petite -> situé à gauche. En utilisant lambda, on commence à trier par la valeur plus petite
             )
 
+            # Retirer les mains alignées (hands_sorted) une par une (une fois pour une main, deux fois pour deux mains)
             for hand_landmarks in hands_sorted:
 
-                mp_draw.draw_landmarks(frame, hand_landmarks, mp_hands.HAND_CONNECTIONS)
+                # Dessin des landmarks
+                mp_draw.draw_landmarks(frame, hand_landmarks, mp_hands.HAND_CONNECTIONS) # HAND_CONNECTIONS = relier les points pour organiser l'ossature des doigts
 
-                # ===== NORMALISATION =====
+                # On normalise avec la fonction déjà crée en ligne 50
                 normalized = normalize_hand(hand_landmarks)
 
+                # On ajoute les données normalisés dans la liste destinée à stocker les 126 coordonnées qui seront finalement enregistrées dans un fichier CSV
                 landmarks_to_save.extend(normalized)
 
-            # ===== SI UNE MAIN =====
+            # Si c'est une main
             if len(hands_sorted) == 1:
-                landmarks_to_save.extend([0.0] * 63)
+                landmarks_to_save.extend([0.0] * 63) # Zero Padding (remplissage par zéros) pour chaque ligne du fichier CSV possède exactement le même nombre de valeurs
 
-        # ===== AFFICHAGE =====
+        # Affichage
+
+        # Nombre de main(s) apparaît sur l'écran
         nb_mains = (
             len(result.multi_hand_landmarks) if result.multi_hand_landmarks else 0
         )
 
+        # Afficher le nom du geste ainsi le nombre de main apparaît
         cv2.putText(
-            frame,
+            frame, # Ecran de webcam pour écrire le nom du geste et le nombre de main
             f"Label: {label} | Mains: {nb_mains}",
-            (10, 30),
-            cv2.FONT_HERSHEY_SIMPLEX,
-            0.7,
-            (255, 255, 0),
-            2,
+            (10, 30), # x : 10 pixel, y :30 pixel -> haut à gauche
+            cv2.FONT_HERSHEY_SIMPLEX, # police par défaut fourni par OpenCV
+            0.7, # Rapport de taille de police
+            (255, 255, 0), # Couleur de texte (BGR pour OpenCV)
+            2, # épaisseur des lignes de texte
         )
 
-        cv2.imshow("Collecte Multi-Mains", frame)
+        # Afficher le frame l'écran pour on puisse visualiser
+        cv2.imshow("Collecte Multi-Mains", frame) # imshow -> pour afficher une image en window
 
-        # ===== CLAVIER =====
-        key = cv2.waitKey(1) & 0xFF
+        # Détection du clavier
+        key = cv2.waitKey(1) & 0xFF # on attend 1 ms (= 0.001s) avant utilisateur saisit le bouton et 0xFF (hexadecimal) pour la même saisie de touches sous Windows et Linux
 
-        # ===== SAUVEGARDE =====
+        # Touche S pour sauvegarder et les données sont remplies 
         if key == ord("s") and len(landmarks_to_save) == 126:
 
+            # on enregistre vraiment dans un fichier CSV une ligne de data en contenant 126 valeurs ainsi le nom du geste
             writer.writerow(landmarks_to_save + [label])
 
             print("✅ Enregistré")
 
-        # ===== ESC =====
+        # Touche ESC pour s'arrêter
         elif key == 27:
             break
 
-# ===== FIN =====
-cap.release()
-cv2.destroyAllWindows()
+# FIN
+cap.release() # On ferme le webcam
+cv2.destroyAllWindows() # Fermer de force toutes les fenêtres liées à OpenCV (« Collecte Multi-Mains ») qui étaient ouvertes à l'écran et effacer les complètement de l'espace mémoire de l'ordinateur.
