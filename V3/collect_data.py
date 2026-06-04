@@ -41,7 +41,7 @@ mapping = {
     "PEACE": "v_de_la_victoire",
 }
 
-
+# Création du chemin
 BASE_DIR = os.path.dirname(os.path.abspath(__file__)) # Récupèrer le dossier où se trouve ce fichier (collect_data.py -> Chemin absolu -> Dossier V3)
 DATASET_PATH = os.path.join(BASE_DIR, "dataset.csv") # Création du chemin du dataset dans un dossier V3
 
