@@ -55,7 +55,7 @@ def normalize_hand(hand_landmarks):
     wrist = hand_landmarks.landmark[0] # poignet
     middle = hand_landmarks.landmark[12] # extrémité du majeur
 
-    # Distance de référence en appliquant la distance euclidienne
+    # Distance de référence en appliquant la distance euclidienne (= taille de main)
     hand_size = math.sqrt(
         (middle.x - wrist.x) ** 2
         + (middle.y - wrist.y) ** 2
