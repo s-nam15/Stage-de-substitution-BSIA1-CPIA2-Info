@@ -1,0 +1,28 @@
+Aujourd'hui, nous avons travaillé sur l’amélioration de la robustesse du modèle de reconnaissance des gestes. 
+
+Tout d'abord, nous avons appliqué le technique du variabilité ou variété proposé par notre tuteur Nicolas,
+
+Trois types de transformations ont été appliqués :
+
+- l’ajout d’un bruit gaussien léger sur les coordonnées (moyenne nulle et faible variance pour simuler les petites imprécisions de détection de la caméra et de MediaPipe
+- une variation d’échelle pour représenter les changements de distance entre la main et la caméra
+- une légère rotation pour prendre en compte les différences d’orientation de la main
+
+Nous avons comparé les performances du modèle mais les résultats montrent qu’il n’y a pas de différence significative sur les performances globales.
+
+Ensuite, nous avons réussi à afficher en temps réel le pourcentage de reconnaissance du geste à l’écran. Nous avons également modifié le nombre de voisins K de l’algorithme KNN 3 à 10 pour obtenir un pourcentage plus fluide et plus précis.
+
+En effet avec k = 3, seules trois valeurs de confiance peuvent être obtenues ce qui n'est pas fluide : 
+
+- 3/3 = 100%
+- 2/3 = 66%
+- 1/3 = 33%
+
+Avec k = 10, le pourcentage peut varier par incréments de 10 % ce qui est plus fluide en visualisant.
+
+Enfin, nous avons obtenu le nombre de données pour chaque geste ainsi que la moyenne du nombre de données par geste grâce à la création d’un nouveau fichier « count_data.py » permettant de consulter facilement les statistiques de données. D'après le calcul, on pouvait obtenir une moyenne de 1084,3 échantillons par geste.
+
+La semaine prochaine, on va essayer de prendre un rdv avec Jessica pour afficher notre système à l'écran en bas pendnat l'heure de midi comme Sébastien nous a dit hier et on note et analyse les éléments des erreurs pendant le test avec plusieurs mains différentes.
+
+Et on va voir avec notre tuteur Nicolas pour discuter la technique de variabilité comme il n’y a pas de différence significative sur les performances globales.
+
