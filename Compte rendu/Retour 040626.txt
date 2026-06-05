@@ -1,0 +1,11 @@
+Point d'amélioration : 
+
+- ajouter le taux de percentage du geste en temps réel
+- Variabilite (ou Variété)
+
+
+Développement de nouveu système : 
+
+- Pour intéragir avec du robot plus tard, on fait l'ordre au robot en réalisant le geste. Par exemple, si on réalise la geste du poing, le robot s'arrête. Si on tourne la main avec du geste index, le robot tourne.
+ 
+
