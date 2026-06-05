@@ -31,7 +31,7 @@ C'est le façon pour éviter le Surapprentissage en machine learning
 """
 
 # Création du modèle KNN
-model = KNeighborsClassifier(n_neighbors=3) # On définit le nombre de voisin plus proche k = 3
+model = KNeighborsClassifier(n_neighbors=10) # On définit le nombre de voisin plus proche k = 3
 model.fit(X_train, y_train) # fit : apprentissage du modèle
 
 # Précision (la note d'examen)
