@@ -1,0 +1,5 @@
+Aujourd'hui, nous avons commencé à préparer notre système pour effecuter l'instruction au robot par la suite. Par exemple, lorsque la musique est lancée, si on fait le geste du poing, la musique s'arrête. Sinon, elle reprend. Si on fait le geste de la main vers la gauche, la musique passe à la suivante dans la playlist.
+
+Ensuite, nous avons planifié un affichage sur un écran dans le hall ce mercredi et ce jeudi midi pendant l'heure de midi afin de tester le système avec le plus de mains différentes possibles sur le campus grâce à Jessica.
+
+Nous avons également discuté avec Jessica de l'interaction avec le robot ce qui est notre deuxième livrable mais elle ne savait pas trop quoi faire pour nous. Nous devons donc en discuter avec vous.
