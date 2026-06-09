@@ -1,0 +1,10 @@
+Aujourd’hui, nous avons continué à travailler sur la manipulation de la musique à l’aide de gestes :
+
+- poing levé -> arrêt de la musique 
+- main levée -> reprise de la musique 
+- main vers la gauche -> musique précédente dans la playlist 
+- main vers la droite -> musique suivante dans la playlist
+
+D’après les tests réalisés sur YouTube, le système fonctionne globalement bien mais quelques erreurs restent à corriger. En effet, lorsqu’on passe à la musique précédente ou suivante à l’aide des gestes « main vers la gauche » ou « main vers la droite », le geste « poing levé » ne permet plus d’arrêter la musique. À l’inverse, la musique s’arrête lorsque l’on réalise le geste « main levée » alors que ce geste devrait normalement relancer la lecture.
+
+Demain, nous essaierons de corriger ces erreurs. Et pendant la pause de midi, nous afficherons également notre projet dans le hall afin de le tester avec différentes personnes du campus et de vérifier son fonctionnement avec diverses formes et positions de mains.
