@@ -4,6 +4,14 @@ import joblib # Enregistrer le modèle machine learning entrâiné sous forme de
 import os # Permettre de gérer les chemins de fichiers
 import numpy as np # Pour calculer l'algèbre linéaire
 import math # Pour calculer la distance euclidienne
+import pyautogui
+import time
+
+# Contrôle le musique
+last_command_time = 0
+COMMAND_DELAY = 2  # secondes
+music_paused = False
+
 
 # Gestes
 mapping = {
@@ -204,10 +212,55 @@ while True:
                 max_prob = np.max(probabilities)
                 percentage = int(max_prob * 100)
 
-                # Geste connu (Supérieur ou égal à 70%)
                 if max_prob >= CONFIDENCE_THRESHOLD: 
                     class_idx = np.argmax(probabilities) 
                     pred_key = model.classes_[class_idx]
+
+                    # ==========================
+                    # CONTROLE DE LA MUSIQUE
+                    # ==========================
+                    current_time = time.time()
+
+                    if current_time - last_command_time > COMMAND_DELAY:
+
+                        # PAUSE
+                        if pred_key == "RAISED_FIST" and not music_paused:
+                             pyautogui.press("playpause")
+                             music_paused = True
+                             last_command_time = current_time
+                             print("⏸ Musique en pause")
+
+
+                        # REPRISE
+                        elif pred_key == "SPREAD_HAND" and music_paused:
+                             pyautogui.press("playpause")
+                             music_paused = False
+                             last_command_time = current_time
+                             print("▶️ Musique relancée")
+
+
+                        # SUIVANT
+                        elif pred_key == "HAND_TO_THE_RIGHT":
+
+                            pyautogui.press("nexttrack")
+
+                            last_command_time = current_time
+
+                            print("⏭ Musique suivante")
+
+
+                        # PRECEDENT
+                        elif pred_key == "HAND_TO_THE_LEFT":
+
+                            pyautogui.press("prevtrack")
+
+                            last_command_time = current_time
+
+                            print("⏮ Musique précédente")
+
+                    # ==========================
+                    # FIN CONTROLE MUSIQUE
+                    # ==========================
 
                     if pred_key in mapping:
                         clean_name = mapping[pred_key].replace("_", " ").capitalize()
