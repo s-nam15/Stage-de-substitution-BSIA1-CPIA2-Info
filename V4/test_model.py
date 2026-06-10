@@ -7,11 +7,6 @@ import math # Pour calculer la distance euclidienne
 import pyautogui
 import time
 
-# Contrôle le musique
-last_command_time = 0
-COMMAND_DELAY = 2  # secondes
-music_paused = False
-
 
 # Gestes
 mapping = {
@@ -57,6 +52,11 @@ BASE_DIR = os.path.dirname(os.path.abspath(__file__)) # Récupèrer le dossier o
 
 MODEL_PATH = os.path.join(BASE_DIR, "gesture_model.pkl") # Création du chemin du gesture_model (modèle machine learning sous forme de fichier) dans un dossier V3
 IMG_DIR = os.path.join(BASE_DIR, "static", "img") # Création du chemin du dossier static -> dossier img dans un dossier V3
+
+# Contrôle de la vidéo
+last_command_time = 0
+COMMAND_DELAY = 2  # secondes -> Délai d'attente pour éviter l'exécution consécutive de la même commande
+music_paused = False # etat initial = musique en train de relancer, True si la musique en pause
 
 
 # Chargement du modèle
@@ -216,51 +216,44 @@ while True:
                     class_idx = np.argmax(probabilities) 
                     pred_key = model.classes_[class_idx]
 
-                    # ==========================
-                    # CONTROLE DE LA MUSIQUE
-                    # ==========================
+                    # Manipulation de la vidéo en réalisant les gestes (poing levee, main levee doigts ecartes, main vers la gauche et la droite)
+                    
+                    # Heure actuelle en secondes
                     current_time = time.time()
 
+                    # Vérifier si plus de 2s s'est passé depuis la dernière commande
                     if current_time - last_command_time > COMMAND_DELAY:
 
-                        # PAUSE
+                        # Pause (poing levee)
                         if pred_key == "RAISED_FIST" and not music_paused:
-                             pyautogui.press("playpause")
+                             pyautogui.press("playpause") # touche l'appui play et pause
                              music_paused = True
-                             last_command_time = current_time
+                             last_command_time = current_time # heure actuelle devient comme l'heure de dernière commande effecuté 
                              print("⏸ Musique en pause")
 
 
-                        # REPRISE
+                        # Reprise (main levee doigts ecartes)
                         elif pred_key == "SPREAD_HAND" and music_paused:
-                             pyautogui.press("playpause")
+                             pyautogui.press("playpause") 
                              music_paused = False
                              last_command_time = current_time
                              print("▶️ Musique relancée")
 
 
-                        # SUIVANT
+                        # Suivant dans la playlist (main vers la droite)
                         elif pred_key == "HAND_TO_THE_RIGHT":
-
-                            pyautogui.press("nexttrack")
-
+                            pyautogui.press("nexttrack") # suivant
                             last_command_time = current_time
-
                             print("⏭ Musique suivante")
 
 
-                        # PRECEDENT
+                        # Precedent dans la playlist (main vers la gauche)
                         elif pred_key == "HAND_TO_THE_LEFT":
-
-                            pyautogui.press("prevtrack")
-
+                            pyautogui.press("prevtrack") # precedent
                             last_command_time = current_time
-
                             print("⏮ Musique précédente")
 
-                    # ==========================
-                    # FIN CONTROLE MUSIQUE
-                    # ==========================
+                    # Fin de manipulation de la vidéo
 
                     if pred_key in mapping:
                         clean_name = mapping[pred_key].replace("_", " ").capitalize()
