@@ -1,0 +1,4 @@
+Aujourd'hui, nous avons effectué des tests avec plusieurs personnes présentes sur le campus en affichant le système sur l'écran de télévision dans le hall. D'après les améliorations demandées par le directeur et le tuteur, le système fonctionne désormais beaucoup mieux qu'avant même lorsque les utilisateurs n'ont pas la même taille de main ou réalisent les gestes à différentes distances ou angles de la caméra.
+
+Nous avons également réussi à résoudre le problème rencontré hier concernant le contrôle de la musique. Désormais, lorsque l'on réalise le geste du poing levé, la musique (ou une vidéo YouTube par exemple) se met en pause. Pour reprendre la lecture, il suffit d'effectuer le geste de la main levée avec les doigts écartés.
+Pour passer à la musique suivante, il suffit d'effectuer un mouvement de la main vers la droite. À l'inverse, pour revenir à la musique précédente, il suffit de réaliser un mouvement de la main vers la gauche.
