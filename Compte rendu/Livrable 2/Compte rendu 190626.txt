@@ -1,0 +1,10 @@
+Aujourd'hui, nous avons réussi à contrôler et à bouger le robot depuis le PC.
+
+D'abord, nous avons essayé de nous connecter via un câble Ethernet en configurant l'IP du PC sur la même plage que celle du robot (plage APIPA : 169.254.0.0 à 169.254.255.255). D'après nos recherches, le robot Niryo Ned possède par défaut l'adresse fixe 169.254.200.200. Nous avons donc configuré l'adresse IP de la carte Ethernet du PC en 169.254.200.10 afin de permettre dans la même plage.
+Premier test de ping sur ubuntu ait fonctionné parfaitement (Réponse de 169.254.200.200 : octets=32 temps<1ms TTL=128) mais les tentatives suivantes ont toutes échoué renvoyant l'erreur : Réponse de 169.254.200.10 : Impossible de joindre l’hôte de destination. Nous avons testé plusieurs redémarrages du PC et du robot et le résultat est resté le même.
+
+Nous avons donc abandonné la configuration manuelle par câble Ethernet pour chercher une autre solution : une connexion automatique via le Wi-Fi. Pour cela, nous avons utilisé le logiciel NiryoStudio et avons réussi à établir la connexion sur l'adresse IP par défaut du Wi-Fi : 10.10.10.10. Nous avons validé cette connexion avec un ping réussi vers 10.10.10.10 depuis Ubuntu ce qui nous a enfin permis de contrôler et de faire bouger le robot depuis le PC.
+
+Nous avons aussi consulté la documentation officielle du robot pour comprendre la signification du panneau LED et identifier les points de vigilance, etc.
+
+La semaine prochaine, nous allons tester l'intégration de notre système de reconnaissance gestuelle développé en Python afin d'envoyer des instructions de mouvement directes au robot.
