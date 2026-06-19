@@ -6,13 +6,7 @@ import numpy as np
 
 # ===== CONFIGURATION =====
 mapping = {
-    "FINGERS_JOINED": "bout_des_doigts_joints",
-    "HORNS": "cornes_avec_les_doigts",
-    "MIDDLE_FINGER": "doigt_dhonneur",
-    "CROSSED_FINGERS": "doigts_croises",
-    "POINT_UP": "index_pointant_vers_le_haut",
-    "POINT_AT_USER": "index_pointant_vers_lutilisateur",
-    "LOVE_YOU": "signe_je_taime",
+  
     "POINT_RIGHT": "main_avec_index_pointant_a_droite",
     "POINT_LEFT": "main_avec_index_pointant_a_gauche",
     "POINT_DOWN": "main_avec_index_pointant_vers_le_bas",
@@ -50,7 +44,13 @@ IMG_DIR = os.path.join(BASE_DIR, "img")
 # Chargement Modèle
 if os.path.exists(MODEL_PATH):
     model = joblib.load(MODEL_PATH)
-    print("✅ Modèle chargé.")
+    print("✅ Modèle c  "FINGERS_JOINED": "bout_des_doigts_joints",
+    "HORNS": "cornes_avec_les_doigts",
+    "MIDDLE_FINGER": "doigt_dhonneur",
+    "CROSSED_FINGERS": "doigts_croises",
+    "POINT_UP": "index_pointant_vers_le_haut",
+    "POINT_AT_USER": "index_pointant_vers_lutilisateur",
+    "LOVE_YOU": "signe_je_taime",hargé.")
 else:
     print(f"❌ Modèle introuvable à : {MODEL_PATH}")
     exit()

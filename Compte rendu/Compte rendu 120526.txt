@@ -1,0 +1,5 @@
+Aujourd’hui, nous avons contiinué à travailler sur la partie front-end du projet.
+nous avons avancé sur le site destiné aux utilisateurs en revoyant certains éléments de l’interface et de l’affichage afin de rendre l’ensemble plus clair et plus fluide. Nous avons également pris du temps pour mieux organiser certains aspects du site et préparer la suite du développement.
+
+Cette avancée permet d’avoir une base plus propre et plus fonctionnelle pour continuer le projet dans de bonnes conditions.
+ 

@@ -1,0 +1,9 @@
+Aujourd’hui, nous avons corrigé un bug qui empêchait le bon fonctionnement du système. La reconnaissance ne s’effectuait pas correctement sur le site alors qu’elle fonctionnait normalement lors des tests sur VS Code.
+
+Après analyse, nous avons identifié la source du problème et appliqué les corrections nécessaires afin de rétablir le bon fonctionnement du système.
+
+Nous avons également constaté un nouveau bug concernant trois gestes spécifiques que nous avons essayé de corriger. Nous poursuivrons le travail demain afin de résoudre complètement ce problème.
+
+Par ailleurs, nous avons réussi à mettre en place l’affichage d’une détection « inconnue » pour les gestes qui n’ont pas été entraînés. Pour cela, nous avons utilisé la méthode `predict_proba` du modèle K-Neighbors (KNN). Au lieu de prédire directement une classe, le modèle attribue un score de probabilité à chaque geste. Si la probabilité maximale obtenue est inférieure à un seuil défini (par exemple 60 %), le geste est automatiquement considéré comme « INCONNU ».
+
+Une fois cette étape finalisée, nous commencerons l’entraînement et l’intégration des gestes à deux mains.

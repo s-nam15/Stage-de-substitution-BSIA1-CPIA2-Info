@@ -1,0 +1,28 @@
+Nous avons mis en place un système complet de reconnaissance de gestes de la main :
+
+- détection avec MediaPipe,
+- analyse simple des doigts (levés / abaissés),
+- reconnaissance de gestes (poing, main ouverte, peace, index),
+- affichage en temps réel via une interface web avec Flask.
+
+Le pipeline fonctionne correctement pour des gestes simples.
+
+Cependant, nous avons rencontré les limites de cette méthode. Elle repose uniquement sur la position des doigts (levés ou abaissés). Elle est efficace pour quelques gestes simples, mais devient limitée pour un grand nombre de gestes (par exemple 43 emojis) ainsi que pour des gestes complexes ou très similaires.
+
+Pour résoudre ce problème, nous avons utilisé des méthodes plus avancées, comme l’analyse des positions des points de la main et le machine learning.
+
+Nous avons donc mis en place une approche basée sur le machine learning en créant trois fichiers :
+
+- collect_data.py : pour collecter les données,
+- train_model.py : pour entraîner le modèle,
+- test_model.py : pour tester le modèle.
+
+Par exemple, dans collect_data.py, nous définissons un geste à apprendre, puis nous l’enregistrons plusieurs fois via la caméra afin d’obtenir suffisamment d’exemples et éviter les confusions avec d’autres gestes similaires. Les données sont ensuite sauvegardées dans un fichier CSV.
+
+Ensuite, avec train_model.py, ces données sont utilisées pour entraîner un modèle, qui est enregistré dans un fichier gesture_model.pkl. Le format .pkl (Pickle) permet de stocker le modèle entraîné, que le programme pourra réutiliser pour reconnaître les gestes.
+
+Enfin, dans test_model.py, nous testons si le modèle reconnaît correctement les gestes en affichant l’emoji correspondant.
+
+Pour les emojis, nous nous sommes basés sur le site : https://emojiterra.com/fr/mains/ (43 emojis de mains).
+
+Demain, nous allons corriger certains problèmes (notamment le chargement de certaines images), puis essayer d’entraîner le modèle avec les 43 gestes et vérifier si tout fonctionne correctement.

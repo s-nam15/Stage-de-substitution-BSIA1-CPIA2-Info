@@ -1,0 +1,6 @@
+Aujourd’hui, nous avons travaillé sur plusieurs aspects du projet.
+Tout d’abord, nous avons résolu un problème lié au chargement des images. Dans la continuité, nous allons améliorer l’affichage afin de le rendre plus dynamique et plus fluide pour l’utilisateur.
+
+Ensuite, nous avons entraîné l’IA à reconnaître les 43 gestes de la main. L’ensemble du modèle fonctionne correctement et la reconnaissance des différents gestes s’effectue de manière fiable et cohérente lors des tests réalisés.
+
+Enfin, nous avons commencé le développement de la page web destinée à l’interface utilisateur.

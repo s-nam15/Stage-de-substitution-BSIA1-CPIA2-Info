@@ -1,0 +1,16 @@
+Aujourd’hui, nous avons réglé le problème qui nous avait empêchés hier : seule la main gauche était correctement détectée, alors que maintenant, les gestes sont reconnus correctement pour les deux mains.
+
+Nous avons également amélioré le système pour qu’il fonctionne avec les mains de plusieurs utilisateurs, et le programme reconnaît désormais les gestes de manière plus fiable.
+
+Ensuite, nous avons transformé les résultats en emojis en utilisant des images. Par exemple, au lieu d’afficher « Poing », le programme affiche maintenant l’emoji du poing sous forme d’image.
+
+Nous avons également créé un répertoire sur GitHub afin de pouvoir facilement partager et récupérer le code de chacun.
+
+Demain après-midi, nous avons une visite dans un collège avec Jessica pour découvrir l’atelier et aider les élèves.
+
+La semaine prochaine, nous allons commencer à :
+
+- rendre l’affichage des emojis plus dynamique (et non de simples images statiques)
+- résoudre certains problèmes (la main ouverte ne fonctionne pas encore, on ne sait pas pourquoi pour l'instant)
+- organiser le code proprement en plusieurs fichiers
+- créer une page web simple pour tester le système plus facilement pour les utilisateurs

@@ -1,0 +1,14 @@
+Aujourd’hui, nous avons testé la reconnaissance de gestes de la main avec MediaPipe Tasks afin de comprendre comment les mouvements sont détectés. D’après le modèle HandLandmarker (image officielle disponible sur la page Google), nous avons appris qu’il existe un total de 21 points utilisés pour analyser les mains.
+
+Par exemple :
+
+L’index est considéré comme replié si la distance entre les points 0 et 8 est inférieure à celle entre les points 0 et 6.
+Le majeur est considéré comme replié si la distance entre les points 0 et 12 est inférieure à celle entre les points 0 et 10.
+L’annulaire est considéré comme replié si la distance entre les points 0 et 16 est inférieure à celle entre les points 0 et 14.
+
+Pour réaliser et tester des gestes simples de la main, nous avons utilisé le langage Python comme indiqué dans le sujet de stage. Nous avons installé les bibliothèques OpenCV pour afficher la fenêtre de la webcam et MediaPipe pour analyser les 21 points dans VS Code.
+
+Nous avons testé quatre gestes : poing, main ouverte, index levé et signe de la paix.
+Cela fonctionne plutôt bien, mais nous avons observé quelques erreurs dans les paramètres : par exemple, le système ne détecte pas toujours correctement le poing, même lorsque tous les doigts sont bien repliés.
+
+Demain, nous allons essayer de corriger ces problèmes et de transformer la détection en emojis.

@@ -1,0 +1,8 @@
+Aujourd’hui, nous avons installé Flask (pip install flask) afin de créer un serveur web permettant de connecter notre code Python (OpenCV, MediaPipe…) avec une interface web (HTML/CSS). Flask est un framework web en Python.
+
+Grâce à cela, nous avons pu créer une page web simple pour tester le système plus facilement du point de vue des utilisateurs. Nous avons choisi Flask plutôt que Apache HTTP Server car Flask permet d’exécuter du code Python dynamique en temps réel (OpenCV, MediaPipe), alors qu’Apache sert principalement des fichiers web statiques.
+
+Architecture :
+Caméra → Python (OpenCV + MediaPipe) → serveur web (Flask) → page web (HTML)
+
+Nous avons également résolu le problème qui nous avait empêchés la semaine dernière : la caméra détecte maintenant correctement le geste de la main ouverte et affiche l’emoji correspondant.

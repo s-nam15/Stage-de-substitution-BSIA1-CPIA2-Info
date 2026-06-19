@@ -1,0 +1,3 @@
+Aujourd’hui, nous avons poursuivi l’entraînement du modèle d’ia afin d’améliorer la reconnaissance des gestes de la main à une main. La détection ne fonctionne pas parfaitement à 100 %, cependant nous estimons que le système est désormais suffisamment fiable pour une utilisation correcte dans la majorité des cas.
+Enfin, quelques retouches ont été apportées au site web afin d’améliorer l’interface et le rendu visuel global.
+Demain, nous commencerons à entraîner le modèle pour la reconnaissance des gestes à deux mains.

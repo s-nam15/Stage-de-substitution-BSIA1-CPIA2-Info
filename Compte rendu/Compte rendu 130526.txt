@@ -1,0 +1,9 @@
+Bonjour,
+
+Aujourd’hui, nous avons finalisé le site destiné aux utilisateurs. 
+
+Nous avons également terminé l’entraînement de l’IA pour la reconnaissance des gestes réalisés avec une seule main. La prochaine étape, prévue pour la semaine prochaine, consistera à entraîner les gestes effectués avec deux mains afin de compléter l’ensemble du système de reconnaissance.
+
+Une fois cette partie terminée, nous l’ajouterons directement au site.
+
+Enfin, lorsque toutes les fonctionnalités principales seront finalisées, nous nous concentrerons sur les améliorations et les finitions du projet et la préparation du premier livrable.

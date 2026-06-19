@@ -1,0 +1,5 @@
+Aujourd’hui, nous avons continué à entraîner les 33 gestes. Nous avons supprimé les gestes impossibles à reconnaître comme Main qui écrit ou Vernis à ongles afin d’éviter les erreurs.
+
+Nous avons également amélioré l’affichage des émojis pour le rendre plus naturel au lieu d’afficher simplement une image statique. Une fois que l’entraînement de tous les gestes sera terminé et suffisamment précis, nous l’appliquerons directement dans le système.
+
+Cette semaine, nous allons essayer de finaliser l’entraînement des gestes, l’affichage dynamique des émojis ainsi que l’intégration jusqu’à la page web qui constitue la dernière étape du premier livrable.

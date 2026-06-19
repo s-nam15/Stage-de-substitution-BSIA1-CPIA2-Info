@@ -1,0 +1,30 @@
+Aujourd’hui, nous avons poursuivi le travail sur l’amélioration et la correction de la détection des gestes de la main afin de rendre le système plus fiable et plus précis.
+
+Nous avons effectué plusieurs séries de tests pour analyser les erreurs de reconnaissance et les conflits entre certains gestes similaires. Les tests ont montré que certains gestes ne sont pas détectés correctement dans certaines zones de l’écran alors qu’ils fonctionnent normalement dans d’autres positions. Par exemple :
+
+- le geste « pouce vers le bas » ne fonctionne que pour la main gauche située à droite de l’écran ;
+- le geste « pouce et index rapprochés » fonctionne uniquement en haut à droite ;
+- le « signe appel » fonctionne seulement en bas à droite ;
+- les « cornes avec les doigts » fonctionnent uniquement avec la main droite ;
+- le geste « V de la victoire » ne fonctionne pas correctement avec la main droite.
+
+Lors des différents tests, nous avons travaillé sur les gestes suivants :
+
+- Ok
+- Index pointant vers le haut
+- Index pointant vers l’utilisateur
+- Pouce vers le haut
+- Pouce vers le bas
+- Pouce et index rapprochés
+- V de la victoire
+- Cornes avec les doigts
+- Signe appel
+- Doigts croisés
+- Bout des doigts joints
+- Signe « je t’aime »
+- Main avec index et pouce croisés
+- Poing de face
+
+Nous avons également constaté qu’en corrigeant un geste, cela pouvait provoquer des erreurs sur d’autres gestes similaires qui fonctionnaient auparavant. Par exemple, après avoir amélioré la détection du geste « V de la victoire », le geste « doigts croisés » ne fonctionnait plus correctement alors qu’il marchait avant la modification. Cela montre que certains gestes présentent des similitudes importantes et créent des conflits dans le système de reconnaissance.
+
+Demain, nous continuerons l’entraînement et l’amélioration des gestes afin de réduire ces conflits et d’obtenir une détection la plus stable et précise possible. D’après les différents tests réalisés, nous pensons qu’une précision parfaite de 100 % sera difficile à atteindre mais nous continuerons à optimiser le système pour améliorer au maximum sa fiabilité.
