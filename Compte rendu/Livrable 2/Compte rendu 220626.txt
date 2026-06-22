@@ -1,0 +1,5 @@
+Aujourd'hui, nous avons cherché comment utiliser notre programme Python reconnaissance gestuelle en temps réel avec le robot après avoir validé la connexion Wi-Fi entre le PC et le robot.
+
+Pour cela, nous avons découvert la bibliothèque « pyniryo » qui permet de communiquer facilement avec le robot depuis un script Python comme notre robot est le modèle Niryo. Grâce à cette bibliothèque, il n'est pas nécessaire de mettre en place des échanges réseau complexes et il suffit d'utiliser des fonctions Python pour envoyer directement des commandes au robot.
+
+Nous avons commencé à réaliser plusieurs tests avec de petits programmes afin de vérifier que la communication fonctionnait correctement. Cependant, nous rencontrons encore des difficultés. Lors de nos tests, le programme n'arrive pas à établir correctement la connexion avec le robot et à exécuter les commandes envoyées. Nous sommens en train de poursuivre les recherches pour identifier l'origine du problème et vérifier la configuration réseau.
