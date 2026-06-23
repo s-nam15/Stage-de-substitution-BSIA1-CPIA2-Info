@@ -1,0 +1,4 @@
+Aujourd'hui, comme nous sommes en télétravail et que nous n'avons pas le robot avec nous, nous avons optimisé notre code pour qu'il soit le plus fluide et mettre les commentaires ainsi que pour bien préparer la soutenance qui arrive cette semaine.
+Nous avons aussi étudié les fonctions de la bibliothèque pyniryo pour comprendre comment associer chaque geste de la webcam à un mouvement du bras de robot. Par exemple, définir quel angle donner aux axes pour chaque commande.
+Et nous reviendrons vers vous si nous bloquons de trop comme vous nous avez dit.
+Enfin, je vous remercie par avance à nous envoyer le mail de signature pour cette après-midi.
