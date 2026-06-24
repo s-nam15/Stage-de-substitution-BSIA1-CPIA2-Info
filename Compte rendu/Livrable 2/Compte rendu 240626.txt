@@ -1,0 +1,4 @@
+Aujourd'hui, nous avons terminé de coder en modifiant les fonctions du mouvement et tout semble maintenant prêt pour l'instant.
+Demain, nous testerons l'intégration de ces nouvelles lignes de code pour voir si le bras du robot réagit correctement à nos gestes.
+Nous espèrons que la connexion se fera sans problème pour que nous puissions enfin voir le robot bouger en vrai à nos gestes.
+
