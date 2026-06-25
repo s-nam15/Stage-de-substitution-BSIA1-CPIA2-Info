@@ -103,7 +103,7 @@ print(f"Nombre total d'échantillons : {len(X)}")
 X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
 
 # Création du modèle KNN 
-model = KNeighborsClassifier(n_neighbors=10) # On définit le nombre de voisin plus proche k = 10
+model = KNeighborsClassifier(n_neighbors = 10) # On définit le nombre de voisin plus proche k = 10
 model.fit(X_train, y_train) # Apprentissage du modèle avec la mine de données variées
 
 # Précision (la note d'examen finale sur des données qu'il n'a pas vues)
