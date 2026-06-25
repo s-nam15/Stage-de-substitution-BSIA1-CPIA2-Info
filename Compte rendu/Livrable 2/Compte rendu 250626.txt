@@ -1,0 +1,5 @@
+Aujourd’hui, nous avons réussi à contrôler le mouvement de la pince en réalisant des gestes devant la caméra. Lorsque nous faisons un poing fermé, la pince se ferme afin de attraper un objet et lorsque nous faisons la main ouverte, la pince s’ouvre complètement.
+
+Cependant, les autres mouvements comme la rotation du bras vers la gauche ou vers la droite ainsi que son déplacement vers le haut ou vers le bas ne fonctionnent pas encore avec les fonctions robot.move() et robot.move(JointsPosition[]) en indiquant les coordonnées des positions du robot dans une parenthèse. En effet, le système embarqué de notre robot est relativement ancien et ne prend pas correctement en charge ces fonctions.
+
+Nous continuons nos recherches afin de résoudre ce problème.
