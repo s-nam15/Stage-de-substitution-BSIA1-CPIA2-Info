@@ -4,7 +4,7 @@ import joblib # Enregistrer le modèle machine learning entrâiné sous forme de
 import os # Permettre de gérer les chemins de fichiers
 import numpy as np # Pour calculer l'algèbre linéaire
 import math # Pour calculer la distance euclidienne
-from pyniryo import NiryoRobot, JointsPosition ### AJOUT NIRYO : Importation de l'API officielle
+from pyniryo import NiryoRobot ### AJOUT NIRYO : Importation de l'API officielle
 
 # Gestes
 mapping = {
@@ -65,9 +65,13 @@ try:
     print("✅ Robot connecté avec succès !")
     
     print("⚙️ Calibrage du robot en cours (attends qu'il bouge un peu)...")
-    # robot.request_new_calibration() # Force le robot à oublier sa calibration actuelle
     robot.calibrate_auto()
     print("✅ Calibrage terminé, prêt à recevoir les gestes !")
+
+    # On mémorise la position exacte de fin de calibration
+    position_apres_cali = robot.get_joints()
+    print(f"📍 Position de calibration enregistrée : {position_apres_cali}")
+
 except Exception as e:
     print(f"❌ Impossible de se connecter au robot : {e}")
     exit()
@@ -194,13 +198,17 @@ while True:
                             # Retour à la position initiale de calibration (tous les axes à 0)
                             robot.move_joints([0.0, 0.0, 0.0, 0.0, 0.0, 0.0])
 
+                        elif pred_key == "POINT_UP":
+                            # On donne la variable qu'on a enregistrée au début
+                            robot.move_joints(position_apres_cali)
+
                         elif pred_key == "THUMBS_UP":
                             # Lever le bras de manière sécurisée (ajusté pour éviter MoveIt KO)
-                            robot.move(JointsPosition(0.0, 0.2, -0.3, 0.0, 0.0, 0.0))
+                            robot.move_joints([0.0, 0.4, -0.5, 0.0, 0.0, 0.0])
                         
                         elif pred_key == "THUMBS_DOWN":
                             # Baisser le bras de manière stable
-                            robot.move(JointsPosition(0.0, 0.4, -0.6, 0.0, 0.0, 0.0))
+                            robot.move_joints([0.0, 0.2, -0.2, 0.0, 0.0, 0.0])
                         
                         elif pred_key == "OPEN_HANDS" or pred_key == "SPREAD_HAND":
                             # Ouvrir la pince
@@ -212,11 +220,11 @@ while True:
                         
                         elif pred_key == "POINT_RIGHT":
                             # Tourner doucement vers la droite
-                            robot.move(JointsPosition(-0.4, 0.2, -0.3, 0.0, 0.0, 0.0))
+                            robot.move_joints([-0.5, 0.2, -0.2, 0.0, 0.0, 0.0])
                             
                         elif pred_key == "POINT_LEFT":
                             # Tourner doucement vers la gauche
-                            robot.move(JointsPosition(0.4, 0.2, -0.3, 0.0, 0.0, 0.0))
+                            robot.move_joints([0.5, 0.2, -0.2, 0.0, 0.0, 0.0])
 
                         # On met à jour le dernier geste exécuté
                         dernier_geste_execute = pred_key
