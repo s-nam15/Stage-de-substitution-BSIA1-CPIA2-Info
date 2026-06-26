@@ -1,0 +1,16 @@
+Aujourd'hui, nous avons réussi à bouger le bras du robot.
+
+L'utilisation de les fonctions récente robot.move() et robot.move(JointsPosition[]) bloquaient la communication. Nous avons trouvé et utilisé la fonction robot.move_joints() qui appartient directement à la bibliothèque pyniryo. C'est elle qui permet d'interagir avec notre robot Niryo Ned en lui envoyant des listes de coordonnées standards. Cela a permis de faire bouger le bras avec succès et en temps réel.
+
+Voici la liste des gestes et de leurs actions pour l'instant : 
+
+- Pouce vers le haut : Lève le bras du robot.
+- Pouce vers le bas : Baisse le bras du robot.
+- Main ouverte : Ouvre la pince.
+- Poing fermé : Ferme la pince.
+- Pointer à gauche : Fait tourner la base du robot vers la gauche.
+- Pointer à droite : Fait tourner la base du robot vers la droite.
+- Index : Ramène le robot à sa position exacte de fin de calibration (position initiale).
+- OK : Positionne tous les axes du robot à (0, 0, 0, 0, 0, 0) -> 6 axes car il faut 6 moteurs pour que le bras puisse à la fois atteindre n'importe quel endroit en 3D et orienter sa pince dans toutes les directions.
+
+Notre objectif de ce projet est d'attraper un objet par la pince, ensuite nous le déplacons à la place où nous voulons.
