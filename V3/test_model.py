@@ -202,13 +202,16 @@ while True:
                             # On donne la variable qu'on a enregistrée au début
                             robot.move_joints(position_apres_cali)
 
+                            # Au cas où quand on deconnecte le robot avec la position non calibration
+                            #robot.move_joints([0.01011087290810508, 0.4934822912792142, -1.2980141354100267, 9.265358979293481e-05, -0.16116063631778532, -0.012232660594410305])
+
                         elif pred_key == "THUMBS_UP":
                             # Lever le bras de manière sécurisée (ajusté pour éviter MoveIt KO)
-                            robot.move_joints([0.0, 0.4, -0.5, 0.0, 0.0, 0.0])
+                            robot.move_joints([0.0, 0.2, -0.2, 0.0, 0.0, 0.0]) 
                         
                         elif pred_key == "THUMBS_DOWN":
                             # Baisser le bras de manière stable
-                            robot.move_joints([0.0, 0.2, -0.2, 0.0, 0.0, 0.0])
+                            robot.move_joints([0.0, 0.4, -0.5, 0.0, 0.0, 0.0])
                         
                         elif pred_key == "OPEN_HANDS" or pred_key == "SPREAD_HAND":
                             # Ouvrir la pince
