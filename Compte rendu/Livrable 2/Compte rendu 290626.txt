@@ -1,0 +1,15 @@
+Comme nous avons réussi à faire bouger le bras du robot globalement la semaine dernière, nous avons maintenant testé les mouvements de chaque axe en insérant différentes coordonnées pour comprendre et de contrôler chaque mouvement en détail afin de pouvoir attraper un objet par la suite.
+
+Voici les mouvements de chaque axes : 
+
+Axe 1 (Base) : Rotation horizontale (gauche / droite).
+
+Axe 2 (Épaule) : Inclinaison du bras vers l'avant ou l'arrière.
+
+Axe 3 (Coude) : Pliage du bras vers le haut ou le bas.
+
+Axe 4 (Poignet) : Rotation du poignet sur lui-même.
+
+Axe 5 (Poignet) : Inclinaison de la pince (haut / bas).
+
+Axe 6 (Pince) : Rotation de la pince sur elle-même.
