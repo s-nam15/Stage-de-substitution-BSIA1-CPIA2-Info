@@ -76,7 +76,7 @@ except Exception as e:
     print(f"❌ Impossible de se connecter au robot : {e}")
     exit()
 
-# Stockage du dernier geste pour éviter d'envoyer en boucle le même ordre
+# Stockage du dernier geste pour éviter d'envoyer en boucle le même ordre (uniquement pour les gestes fixes)
 dernier_geste_execute = None
 
 # Chargement des images depuis dans un dossier img
@@ -190,47 +190,112 @@ while True:
 
                     text_color = (0, 255, 0) 
 
-                    ### CORRECTION TRAJECTOIRES ET AJOUT DU GESTE "OK"
+                    # Récupération immédiate des angles actuels pour le suivi temps réel
+                    try:
+                        angles_actuels = robot.get_joints()
+                    except Exception:
+                        angles_actuels = [0.0] * 6
+
+                    # 1. GESTES UNIQUES (Exécutés une seule fois au changement de geste)
                     if pred_key != dernier_geste_execute:
                         print(f"🤖 Action détectée : {pred_key}")
                         
                         if pred_key == "OK":
-                            # Retour à la position initiale de calibration (tous les axes à 0)
+                            # Retour à l'origine verticale
                             robot.move_joints([0.0, 0.0, 0.0, 0.0, 0.0, 0.0])
+                            dernier_geste_execute = pred_key
 
-                        elif pred_key == "POINT_UP":
-                            # On donne la variable qu'on a enregistrée au début
+                        elif pred_key == "RAISED_HANDS": # Mains levées
+                            # Retour à la position enregistrée après calibration
                             robot.move_joints(position_apres_cali)
+                            dernier_geste_execute = pred_key
 
                             # Au cas où quand on deconnecte le robot avec la position non calibration
                             #robot.move_joints([0.01011087290810508, 0.4934822912792142, -1.2980141354100267, 9.265358979293481e-05, -0.16116063631778532, -0.012232660594410305])
 
-                        elif pred_key == "THUMBS_UP":
-                            # Lever le bras de manière sécurisée (ajusté pour éviter MoveIt KO)
-                            robot.move_joints([0.0, 0.2, -0.2, 0.0, 0.0, 0.0]) 
-                        
-                        elif pred_key == "THUMBS_DOWN":
-                            # Baisser le bras de manière stable
-                            robot.move_joints([0.0, 0.4, -0.5, 0.0, 0.0, 0.0])
-                        
-                        elif pred_key == "OPEN_HANDS" or pred_key == "SPREAD_HAND":
+                        elif pred_key == "OPEN_HANDS" or pred_key == "SPREAD_HAND": # Main levée ou Main levée doigts écartés
                             # Ouvrir la pince
                             robot.open_gripper()
+                            dernier_geste_execute = pred_key
                         
-                        elif pred_key == "RAISED_FIST" or pred_key == "FRONT_FIST":
+                        # Poing levée ou Poing de face ou Poing à droite ou Poing à gauche
+                        elif pred_key == "RAISED_FIST" or pred_key == "FRONT_FIST" or pred_key == "FIST_RIGHT" or pred_key == "FIST_LEFT": 
                             # Fermer la pince
                             robot.close_gripper()
-                        
-                        elif pred_key == "POINT_RIGHT":
-                            # Tourner doucement vers la droite
-                            robot.move_joints([-0.5, 0.2, -0.2, 0.0, 0.0, 0.0])
-                            
-                        elif pred_key == "POINT_LEFT":
-                            # Tourner doucement vers la gauche
-                            robot.move_joints([0.5, 0.2, -0.2, 0.0, 0.0, 0.0])
+                            dernier_geste_execute = pred_key
 
-                        # On met à jour le dernier geste exécuté
-                        dernier_geste_execute = pred_key
+                    # 2. GESTES CONTINUS (Exécutés en boucle pour le suivi en temps réel)
+                    if pred_key == "POINT_LEFT": # Main avec index pointant à gauche
+                        # Ajoute un petit pas à la base (Axe 1) pour tourner à gauche
+                        angles_actuels[0] += 0.16 
+                        robot.move_joints(angles_actuels)
+                        dernier_geste_execute = None # Réinitialise pour autoriser la répétition immédiate
+
+                    elif pred_key == "POINT_RIGHT": # Main avec index pointant à droite
+                        # Retire un petit pas à la base (Axe 1) pour tourner à droite
+                        angles_actuels[0] -= 0.16 
+                        robot.move_joints(angles_actuels)
+                        dernier_geste_execute = None
+
+                    elif pred_key == "POINT_UP": # Main avec index pointant vers le haut
+                        # Redresse l'épaule (Axe 2) pour reculer et lever le bras
+                        angles_actuels[1] += 0.12
+                        robot.move_joints(angles_actuels)
+                        dernier_geste_execute = None
+                    
+                    elif pred_key == "POINT_AT_USER": # Main avec index pointant vers le bas
+                        # Penches l'épaule (Axe 2) pour avancer et descendre le bras
+                        angles_actuels[1] -= 0.12
+                        robot.move_joints(angles_actuels)
+                        dernier_geste_execute = None
+
+                    elif pred_key == "THUMBS_UP": # Pouce vers le haut
+                        # Axe 3 (Coude) -> Plie le coude vers le haut
+                        angles_actuels[2] += 0.12
+                        robot.move_joints(angles_actuels)
+                        dernier_geste_execute = None
+
+                    elif pred_key == "THUMBS_DOWN": # Pouce vers le bas
+                        # Axe 3 (Coude) -> Déplie le coude vers le bas
+                        angles_actuels[2] -= 0.12
+                        robot.move_joints(angles_actuels)
+                        dernier_geste_execute = None
+
+                    elif pred_key == "HAND_TO_THE_LEFT": # Main vers la gauche
+                        # Axe 4 (Poignet) -> Rotation dans le sens anti-horaire
+                        angles_actuels[3] -= 0.12
+                        robot.move_joints(angles_actuels)
+                        dernier_geste_execute = None
+
+                    elif pred_key == "HAND_TO_THE_RIGHT": # Main vers la droite
+                        # Axe 4 (Poignet) -> Rotation dans le sens horaire
+                        angles_actuels[3] += 0.12
+                        robot.move_joints(angles_actuels)
+                        dernier_geste_execute = None
+
+                    elif pred_key == "PALM_UP": # Main paume vers le haut
+                        # Axe 5 (Poignet) -> Oriente la pince vers le haut
+                        angles_actuels[4] += 0.12
+                        robot.move_joints(angles_actuels)
+                        dernier_geste_execute = None
+
+                    elif pred_key == "PALM_DOWN": # Main paume vers le bas
+                        # Axe 5 (Poignet) -> Oriente la pince vers le bas
+                        angles_actuels[4] -= 0.12
+                        robot.move_joints(angles_actuels)
+                        dernier_geste_execute = None
+
+                    elif pred_key == "PINCHED_FINGERS": # Pouce et index rapprochés
+                        # Axe 6 (Pince) -> Rotation horaire de la pince
+                        angles_actuels[5] += 0.12
+                        robot.move_joints(angles_actuels)
+                        dernier_geste_execute = None
+
+                    elif pred_key == "FINGERS_JOINED": # Bout des doigts joints
+                        # Axe 6 (Pince) -> Rotation anti-horaire de la pince
+                        angles_actuels[5] -= 0.12
+                        robot.move_joints(angles_actuels)
+                        dernier_geste_execute = None
 
                 # Geste inconnu (Inférieur à 70%)
                 else:
