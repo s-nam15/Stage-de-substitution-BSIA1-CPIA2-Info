@@ -200,7 +200,7 @@ while True:
                     if pred_key != dernier_geste_execute:
                         print(f"🤖 Action détectée : {pred_key}")
                         
-                        if pred_key == "OK":
+                        if pred_key == "PALMS_TOGETHER":
                             # Retour à l'origine verticale
                             robot.move_joints([0.0, 0.0, 0.0, 0.0, 0.0, 0.0])
                             dernier_geste_execute = pred_key
