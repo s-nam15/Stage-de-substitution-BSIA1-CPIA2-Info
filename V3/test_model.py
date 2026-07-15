@@ -190,7 +190,7 @@ while True:
 
                     text_color = (0, 255, 0) 
 
-                    # Récupération immédiate des angles actuels pour le suivi temps réel
+                    # Récupération la position actuelle des 6 axes
                     try:
                         angles_actuels = robot.get_joints()
                     except Exception:
@@ -198,7 +198,7 @@ while True:
 
                     # 1. GESTES UNIQUES (Exécutés une seule fois au changement de geste)
                     if pred_key != dernier_geste_execute:
-                        print(f"🤖 Action détectée : {pred_key}")
+                        print(f"Action détectée : {pred_key}")
                         
                         if pred_key == "PALMS_TOGETHER": # Paume contre paume doigts vers le haut
                             # Retour à l'origine verticale
