@@ -1,0 +1,2 @@
+- dataset.csv (base de données des coordonnées) -> Fichier V3 dans la branche normalisation
+- gesture_model.pkl (modèle) -> //
