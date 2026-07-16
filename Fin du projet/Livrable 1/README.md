@@ -31,7 +31,7 @@ Installation des outils de traitement de données et Machine Learning :
 
 
 1. **Pour tester le système :** Activez la caméra ou la webcam de votre PC, puis exécutez le script Python nommé **« test\_model.py »**.
-2. **Pour enrichir la base de données et réentraîner le modèle :** Exécutez d'abord le script **« collect\_data.py »** pour enregistrer les coordonnées de vos mains dans le fichier **« test.csv »**. Lancez ensuite **« train\_model.py »** pour entraîner le modèle avec ces nouvelles données.
+2. **Pour enrichir la base de données et réentraîner le modèle :** Exécutez d'abord le script **« collect\_data.py »** pour enregistrer les coordonnées de vos mains dans le fichier **« dataset.csv »**. Lancez ensuite **« train\_model.py »** pour entraîner le modèle avec ces nouvelles données.
 
 
 
